@@ -1,21 +1,28 @@
-from sklearn.datasets import make_blobs
+import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
-# Generate random data
-X, y = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+# Load the Iris dataset
+iris_df = pd.read_csv("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None, names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'class'])
+# Extracting the data from this data-set
+X = iris_df.iloc[:, :-1].values
 
-# Apply K-Means algorithm
-kmeans = KMeans(n_clusters=4) #We are using the built-int library to execute the algorithm to save time
+# Executing the built-in K-Means algorithm
+kmeans = KMeans(n_clusters=3)
 kmeans.fit(X)
 
-# Get cluster centers and labels
+# Getting the cluster centers and labels to add onto the graph
 centers = kmeans.cluster_centers_
 labels = kmeans.labels_
 
 # Plot the data points and cluster centers
-plt.scatter(X[:,0], X[:,1], c=labels)
-plt.scatter(centers[:,0], centers[:,1], marker='x', s=200, linewidths=3, color='r')
+plt.scatter(X[labels == 0, 0], X[labels == 0, 1], s = 100, c = 'red', label = 'Cluster 1')
+plt.scatter(X[labels == 1, 0], X[labels == 1, 1], s = 100, c = 'blue', label = 'Cluster 2')
+plt.scatter(X[labels == 2, 0], X[labels == 2, 1], s = 100, c = 'green', label = 'Cluster 3')
+plt.scatter(centers[:, 0], centers[:,1], s = 200, marker='x', linewidths=3, color='black', label = 'Centroids')
 
-# Finally show the final graph
+#Display the legend
+plt.legend()
+
+#Finally show the output
 plt.show()
