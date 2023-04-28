@@ -36,11 +36,11 @@ def elbowMethod():
 
     # Calculate distortion score for different values of K
     distortions = []
-    K = range(1, 11)
+    K = range(1, 11) # This will do it from 1-11 clusters
     for k in K:
-        kmeans = KMeans(n_clusters=k)
+        kmeans = KMeans(n_clusters=k) # Execute K means with this value of K and get the result
         kmeans.fit(X)
-        distortions.append(kmeans.inertia_)
+        distortions.append(kmeans.inertia_) # The inertia property returns how well the data was clustered
 
     # Plot the distortion score for different values of K
     plt.plot(K, distortions, 'bx-')
@@ -49,12 +49,17 @@ def elbowMethod():
     plt.title('Elbow Method')
     plt.show()
 
+# We want to show both graphs at once, so we use threading to run both methods at once
+# This if statement makes sure that new processes are made ONLY after the main process is done initializing
 if __name__ == "__main__":
+    # First, Declare the processes we will be running
     process1 = multiprocessing.Process(target=mainProgram)
     process2 = multiprocessing.Process(target=elbowMethod)
 
+    # Start these processes
     process1.start()
     process2.start()
 
+    # Finally, join them together to run simultaneously
     process1.join()
     process2.join()
